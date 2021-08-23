@@ -34,11 +34,11 @@ makedata.hpp
 
 `long long RandInt(long long l=1,long long r=1ll*1e9)` 
 
-随机生成一个 $[l,r]$ 范围内的整数。
+随机生成一个 $$[l,r]$$ 范围内的整数。
 
 `double Randec(double l=1,double r=1e9,int digit=2)`
 
-根据 `RandInt()` 随机生成一个 $[l,r]$ 范围内，精度为 `digit` 位的实数。
+根据 `RandInt()` 随机生成一个 $$[l,r]$$ 范围内，精度为 `digit` 位的实数。
 
 ### Random Array 类
 
@@ -107,9 +107,9 @@ struct rdString:rdArray
 
 根据 `rdArray.Shuffle()` 构造一个随机排列。
 
-`rdString RandString(int n,ll rdMin=0,ll rdMax=25)`
+`rdString RandString(int n,long long rdMin=0,long long rdMax=25)`
 
-构造一个随机字符串，字符集为字母表的 $[rdMin,rdMax]$ 位置。
+构造一个随机字符串，字符集为字母表的 $$[rdMin,rdMax]$$ 位置。
 
 `rdString RandSpeStr(int n,int rdsiz,char rdletter[])`
 
@@ -117,11 +117,11 @@ struct rdString:rdArray
 
 ### Stream 类
 
-`void SetDataName(char dname[]) {strcpy(dataname,dname);}`
+`void SetDataName(char dname[])`
 
 设置输入输出文件名。
 
-`void SetDataID(int dID) {assert(dID>=1); DataID=dID;}`
+`void SetDataID(int dID)`
 
 设置当前数据编号。
 
