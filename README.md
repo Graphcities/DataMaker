@@ -147,7 +147,7 @@ struct rdString:rdArray
 
 `rdString RandBrac(int n)`
 
-构造一个长为 $$n$$ 的随机括号序列。
+构造一个长为 ![](http://latex.codecogs.com/gif.latex?n) 的随机括号序列。
 
 ### Stream 类
 
