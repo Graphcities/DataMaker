@@ -30,21 +30,51 @@ makedata.hpp
 
 ---
 
+### Const 类
+
+`const int Maxlen=2e6+5;`
+
+随机数列 / 随机图的最大长度。
+
+`const double PI=acos(-1);`
+
+圆周率。
+
+`const double E=exp(1);`
+
+自然对数。
+
+`char ALPHABET_SMALL[]="abcdefghijklmnopqrstuvwxyz";`
+
+小写字母表。
+
+`char ALPHABET_CAPITAL[]="ABCDEFGHIJKLMNOPQRSTUVWXYZ";`
+
+大写字母表。
+
+`char ALPHABET[]="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";`
+
+字母表。
+
+`char NUMBERS[]="0123456789";`
+
+十进制数位表。
+
+`char ZEROANDONE[]="01";`
+
+二进制数位表。
+
 ### RandInt 类
 
 `long long RandInt(long long l=1,long long r=1ll*1e9)` 
 
-随机生成一个 $$[l,r]$$ 范围内的整数。
+随机生成一个 ![](http://latex.codecogs.com/gif.latex?[l,r]) 范围内的整数。
 
 `double Randec(double l=1,double r=1e9,int digit=2)`
 
-根据 `RandInt()` 随机生成一个 $$[l,r]$$ 范围内，精度为 `digit` 位的实数。
+根据 `RandInt()` 随机生成一个 ![](http://latex.codecogs.com/gif.latex?[l,r]) 范围内，精度为 `digit` 位的实数。
 
 ### Random Array 类
-
-`const int Maxlen=2e6+5;`
-
-随机数列最大长度。
 
 ```cpp
 struct rdArray
@@ -109,11 +139,15 @@ struct rdString:rdArray
 
 `rdString RandString(int n,long long rdMin=0,long long rdMax=25)`
 
-构造一个随机字符串，字符集为字母表的 $$[rdMin,rdMax]$$ 位置。
+构造一个随机字符串，字符集为字母表的 ![](http://latex.codecogs.com/gif.latex?[rdMin,rdMax]) 位置。
 
 `rdString RandSpeStr(int n,int rdsiz,char rdletter[])`
 
 构造特殊字符集字符串。
+
+`rdString RandBrac(int n)`
+
+构造一个长为 $$n$$ 的随机括号序列。
 
 ### Stream 类
 
@@ -136,4 +170,84 @@ struct rdString:rdArray
 `void GetOut()`
 
 结束文件输入，执行文件输出，中途执行 `std.exe`。
+
+### Random Graph 类
+
+`struct Link{int frm,to,nxt; long long w;};`
+
+邻接表存边。
+
+```cpp
+struct rdGraph
+{
+    int n,m,tot,Head[Maxlen],fa[Maxlen];
+    long long rdMin,rdMax;
+    bool isDir,isCon,isRep,isVal;
+    Link Edge[Maxlen*2];
+    int Find(int x);
+    void Addedge(int x,int y,ll z);
+    bool isConnect(int x,int y);
+};
+```
+
+第一行：点数，边数，邻接表开头，并查集父亲。
+
+第二行：边权最小值和最大值。
+
+第三行：是否有方向，是否连通，是否有重边和自环，是否有边权。
+
+第四行：邻接表。
+
+第五行：并查集找祖先的函数。
+
+第六行：加边函数。
+
+第七行：查询是否连通的函数。
+
+```cpp
+struct rdTree:rdGraph
+{
+    int typ;
+};
+```
+
+`rdTree` 继承自 `rdGraph`，多了一个表示类别的 `typ` 变量。
+
+接下来是关于随机图的构造函数：
+
+`rdGraph RandGraph(int n,int m,bool isDir=false,bool isCon=false,bool isRep=false,long long rdMin=1,long long rdMax=1)`
+
+构造一个 ![](http://latex.codecogs.com/gif.latex?n) 点 ![](http://latex.codecogs.com/gif.latex?m) 边的随机图。
+
+`rdGraph RandHackSPFA(int n,int m,bool isDir=false,long long rdMin=1,long long rdMax=1)`
+
+构造一个卡 SPFA 的随机图。
+
+`rdGraph RandDAG(int n,int m,long long rdMin=1,long long rdMax=1)`
+
+构造一个随机的 DAG。
+
+`rdTree RandTree(int n,long long rdMin=1,long long rdMax=1)`
+
+利用 Prufer 序列构造一棵随机树，相当于 `RandGraph(n,n-1,false,true)`。
+
+`rdTree RandChain(int n,bool isSorted=true,long long rdMin=1,long long rdMax=1)`
+
+构造一条随机的链。
+
+`rdTree RandFlower(int n,int root=1,long long rdMin=1,long long rdMax=1)`
+
+构造一个随机的菊花图。
+
+`rdTree RandBinaryTree(int n,long long rdMin=1,long long rdMax=1)`
+
+利用括号序列构造一棵随机的二叉树。
+
+---
+
+### Refrences
+
+- https://mivik.blog.luogu.org/the-art-of-randomness
+- https://blog.csdn.net/qq_45721135/article/details/102472101
+- https://optmize-2.blog.luogu.org/How-to-use-Crayon
 
