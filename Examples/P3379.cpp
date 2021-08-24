@@ -9,6 +9,7 @@ int main()
 {
     SetDataName(Name);
     MakeExe();
+    MakeMatchExe();
 
     for(int TEST=1;TEST<=20;++TEST)
     {
@@ -31,6 +32,10 @@ int main()
         }
 
         GetOut();
+        Match();
     }
+
+    CheckFile(20);
+    ClearFile(20);
     return 0;
 }

@@ -1,6 +1,6 @@
 ## 数据生成器食用指南
 
-### 如何生成测试数据
+### 如何生成测试数据 & 对拍
 
 ```
 <Data>
@@ -12,9 +12,9 @@ makedata.hpp
 
 `<Data>` 存放输入输出数据。
 
-`<Examples>` 存放一些数据生成器的例子。
+`<Examples>` 存放一些数据生成器和对拍程序的例子。
 
-`<Program>` 存放你的标程 `std.cpp`（建议 `std.exe` 一起带上）
+`<Program>` 存放你的标程 `std.cpp`（建议 `std.exe` 一起带上），对拍文件 `match.cpp` （建议 `match.exe` 一起带上），对拍数据 `match.out` 和对拍结果 `result.txt`。
 
 `make.cpp` 即为你的数据生成器。
 
@@ -25,6 +25,14 @@ makedata.hpp
 1. 编写标程，命名为 `std.cpp`，存放至 `<Program>` 文件夹中。
 2. 编写数据生成器 `make.cpp`。
 3. 执行数据生成器，`<Data>` 文件夹中即为数据。
+
+对拍的步骤如下：
+
+1. 编写标程 `std.cpp` 和对拍程序 `match.cpp`，存放至 `<Program>` 文件夹中。
+2. 编写数据生成器 `make.cpp`。
+3. 执行数据生成器，`<Program>` 文件夹中的 `result.txt` 即为对拍结果。（ 编码为 **GBK** ）
+
+程序对拍示例放在 `<Program>` 文件夹中的 `P3379.cpp`。
 
 接下来将简要介绍 `makedata.hpp` 中的结构和函数：
 
@@ -163,6 +171,10 @@ struct rdString:rdArray
 
 编译 `std.cpp`。（编译指令为 `g++ file.cpp -o file --std=c++11 -O2` ）
 
+`void MakeMatchExe()`
+
+编译 `match.cpp`。
+
 `void GetIn()`
 
 开始文件输入。
@@ -170,6 +182,18 @@ struct rdString:rdArray
 `void GetOut()`
 
 结束文件输入，执行文件输出，中途执行 `std.exe`。
+
+`void Match()`
+
+生成对拍文件 `match.out`。
+
+`void CheckFile(int AllID)`
+
+检查文件，开始对拍。
+
+`void ClearFile(int AllID)`
+
+清除对拍文件 `match.out`。
 
 ### Random Graph 类
 
@@ -231,17 +255,21 @@ struct rdTree:rdGraph
 
 利用 Prufer 序列构造一棵随机树，相当于 `RandGraph(n,n-1,false,true)`。
 
+`rdTree RandBranch(int n,int branch=int(1e9),long long rdMin=1,long long rdMax=1)`
+
+构造一棵叉数为 `branch` 的随机树，数据较弱。
+
 `rdTree RandChain(int n,bool isSorted=true,long long rdMin=1,long long rdMax=1)`
 
-构造一条随机的链。
+构造一条随机的链，相当于 `RandBranch(n,1)`。
 
 `rdTree RandFlower(int n,int root=1,long long rdMin=1,long long rdMax=1)`
 
-构造一个随机的菊花图。
+构造一个随机的菊花图，相当于 `RandBranch(n,n-1)`。
 
 `rdTree RandBinaryTree(int n,long long rdMin=1,long long rdMax=1)`
 
-利用括号序列构造一棵随机的二叉树。
+利用括号序列构造一棵随机的二叉树，较 `RandBranch(n,2)` 数据稍强。
 
 ---
 
@@ -249,5 +277,6 @@ struct rdTree:rdGraph
 
 - https://mivik.blog.luogu.org/the-art-of-randomness
 - https://blog.csdn.net/qq_45721135/article/details/102472101
+- https://github.com/luogu-dev/cyaron
 - https://optmize-2.blog.luogu.org/How-to-use-Crayon
 

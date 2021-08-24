@@ -166,10 +166,12 @@ rdString RandBrac(int n) // 构造随机括号序列
 
 // Stream!
 int DataID;
-char dataname[30],filename[30],inname[]=".in",outname[]=".out",filepos[]="Data\\";
+char dataname[30],filename[30],inname[]=".in",outname[]=".out";
+char filepos[]="Data\\",matchname[]="match",matchpos[]="Program\\";
 void SetDataName(char dname[]) {strcpy(dataname,dname);} // 设置文件名
 void SetDataID(int dID) {assert(dID>=1); DataID=dID;} // 设置当前数据编号
 void MakeExe() {system("g++ Program\\std.cpp -o Program\\std --std=c++11 -O2");} // 生成.exe文件
+void MakeMatchExe() {system("g++ Program\\match.cpp -o Program\\match --std=c++11 -O2");} // 生成对拍.exe
 void GetIn() // 设置输入
 {
     strcpy(filename,filepos); strcat(filename,dataname);
@@ -199,6 +201,64 @@ void GetOut() // 设置输出
     freopen("CON","r",stdin);
 	freopen("CON","w",stdout);
     printf("Successfully GetOut TestData %d !\n",DataID);
+}
+void Match() // 生成对拍文件
+{
+    strcpy(filename,filepos); strcat(filename,dataname);
+    char fileid[5]; sprintf(fileid,"%d",DataID);
+    strcat(filename,fileid); strcat(filename,inname);
+    freopen(filename,"r",stdin);
+
+    strcpy(filename,filepos); strcat(filename,dataname);
+    strcat(filename,fileid); strcat(filename,outname);
+    char prename[30]; strcpy(prename,filename);
+
+    strcpy(filename,matchpos); strcat(filename,matchname);
+    strcat(filename,fileid); strcat(filename,outname);
+    freopen(filename,"w",stdout);
+
+    system("Program\\match.exe");
+
+    freopen("CON","r",stdin);
+	freopen("CON","w",stdout);
+    printf("Successfully Match  TestData %d !\n",DataID);
+}
+void CheckFile(int AllID) // 开始对拍
+{
+    freopen("Program\\result.txt","w",stdout);
+
+    for(int i=1;i<=AllID;++i)
+    {
+        char fileid[5]; sprintf(fileid,"%d",i);
+        strcpy(filename,filepos); strcat(filename,dataname);
+        strcat(filename,fileid); strcat(filename,outname);
+        char prename[30]; strcpy(prename,filename);
+        strcpy(filename,matchpos); strcat(filename,matchname);
+        strcat(filename,fileid); strcat(filename,outname);
+
+        char fcname[70]="fc /W ";
+        strcat(fcname,prename); strcat(fcname," "); strcat(fcname,filename);
+        system(fcname);
+    }
+
+    freopen("CON","r",stdin);
+	freopen("CON","w",stdout);
+    printf("\nSuccessfully Check %d Files !",AllID);
+}
+void ClearFile(int AllID) // 清除对拍文件
+{
+    freopen("Program\\result.txt","a",stdout);
+
+    for(int i=1;i<=AllID;++i)
+    {
+        char delname[30];
+        sprintf(delname,"del Program\\match%d.out",i);
+        system(delname);
+    }
+
+    freopen("CON","r",stdin);
+	freopen("CON","w",stdout);
+    printf("\nSuccessfully Clear %d Files !",AllID);
 }
 
 // Random Graph!
@@ -369,6 +429,23 @@ rdTree RandTree(int n,ll rdMin=1,ll rdMax=1) // prufer 序列随机构造树
     }
     if(RandInt(1,2)==1) now.Addedge(leaf,n,RandInt(rdMin,rdMax));
     else now.Addedge(n,leaf,RandInt(rdMin,rdMax));
+    return now;
+}
+rdTree RandBranch(int n,int branch=int(1e9),ll rdMin=1,ll rdMax=1) // 构造随机k叉树
+{
+    assert(n>=1 && rdMin<=rdMax && branch>=1 && branch<=n);
+    rdTree now;
+    now.n=n,now.m=n-1,now.isDir=false,now.isCon=true,now.isRep=false,now.typ=1;
+    int res[n+1],ind[n+1];
+    for(int i=1;i<=n;++i) res[i]=i,ind[i]=0;
+    std::shuffle(res+1,res+n+1,engine);
+    for(int i=2;i<=n;++i)
+    {
+        int a=RandInt(1,i-1);
+        while(ind[a]>=branch) a=RandInt(1,i-1);
+        now.Addedge(res[a],res[i],RandInt(rdMin,rdMax));
+        ind[a]++;
+    }
     return now;
 }
 rdTree RandChain(int n,bool isSorted=true,ll rdMin=1,ll rdMax=1) // 构造随机链
